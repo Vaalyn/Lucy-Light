@@ -1,6 +1,9 @@
 let config  = require('./config/config.json');
 let path    = require('path');
 let discord = require('discord.js-commando');
+let brg     = require('./app/service/brg/brg.js');
+let youtube = require('./app/service/youtube/youtube.js');
+
 let client  = new discord.Client({
 	owner: config.discord.ownerId,
 	commandPrefix: config.discord.commandPrefix
@@ -20,15 +23,17 @@ client.on('ready', () => {
 });
 
 client.on('message', message => {
+	if (message === '!! nowplaying') { return; }
+	nowplaying = message;
 });
 
 client.on('commandError', (cmd, err) => {
-	if (err instanceof commando.FriendlyError) return;
+	if (err instanceof discord.FriendlyError) return;
 	console.error('Error in command ' + cmd.groupID + ':' + cmd.memberName, err);
 });
 
 client.on('commandBlocked', (msg, reason) => {
-	console.log('Command [' + msg.command.groupID + ':' + msg.command.memberName + "] " + blocked + ". Reason: " + reason);
+	console.log('Command [' + msg.command.groupID + ':' + msg.command.memberName + '] blocked' + '. Reason: ' + reason);
 });
 
 client.on('commandPrefixChange', (guild, prefix) => {
@@ -69,3 +74,9 @@ client.on('groupStatusChange', (guild, group, enabled) => {
 });
 
 client.login(config.discord.botToken);
+
+exports.config   = config;
+exports.services = {
+	'brg': brg,
+	'youtube': youtube
+}
