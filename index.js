@@ -23,8 +23,6 @@ client.on('ready', () => {
 });
 
 client.on('message', message => {
-	if (message === '!! nowplaying') { return; }
-	nowplaying = message;
 });
 
 client.on('commandError', (cmd, err) => {
