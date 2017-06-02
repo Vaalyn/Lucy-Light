@@ -4,6 +4,9 @@ let moment  = require('moment');
 let discord = require('discord.js-commando');
 let brg     = require('./app/service/brg/brg.js');
 let youtube = require('./app/service/youtube/youtube.js');
+let google = {
+	calendar: require('./app/service/google/calendar.js')
+}
 
 let winston = require('winston');
 require('winston-daily-rotate-file');
@@ -112,9 +115,9 @@ let updateNowPlayingStatus = setInterval(function() {
 
 exports.client   = client;
 exports.config   = config;
-exports.moment   = moment;
 exports.logger   = logger;
 exports.services = {
 	'brg': brg,
-	'youtube': youtube
+	'youtube': youtube,
+	'google': google
 }
