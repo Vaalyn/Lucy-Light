@@ -94,6 +94,22 @@ client.on('groupStatusChange', (guild, group, enabled) => {
 
 client.login(config.discord.botToken);
 
+let updateNowPlayingStatus = setInterval(function() {
+	brg.getNowPlaying()
+		.then(function(response) {
+			let title      = response.data.result.title;
+			let artist     = response.data.result.artist;
+
+			logger.info('Set game to "' + title + ' - ' + artist + '"');
+			// TODO: Add check if Twitch Stream is online then set to optional parameter as string
+			client.user.setGame(title + ' - ' + artist);
+		})
+		.catch(function(error) {
+			logger.error(error);
+			client.user.setGame('');
+		});
+}, config.discord.updateNowPlayingStatusInterval);
+
 exports.config   = config;
 exports.moment   = moment;
 exports.logger   = logger;

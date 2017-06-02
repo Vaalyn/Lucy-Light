@@ -13,7 +13,8 @@
 			["admin", "Administration commands"],
 			["moderation", "Moderation commands"],
 			["everyone", "Public commands"]
-		]
+		],
+		"updateNowPlayingStatusInterval": 15000
 	},
 	"google": {
 		"calendar": {
