@@ -19,7 +19,7 @@ module.exports = class RoleCommand extends discord.Command {
 				{
 					key: 'member',
 					label: 'user',
-					prompt: 'Wessen Rollen möchtest du sehen?',
+					prompt: 'Wessen Rollen möchtest du sehen?\n',
 					type: 'member'
 				}
 			]
