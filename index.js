@@ -110,6 +110,7 @@ let updateNowPlayingStatus = setInterval(function() {
 		});
 }, config.discord.updateNowPlayingStatusInterval);
 
+exports.client   = client;
 exports.config   = config;
 exports.moment   = moment;
 exports.logger   = logger;
