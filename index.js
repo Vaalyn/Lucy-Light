@@ -1,8 +1,29 @@
 let config  = require('./config/config.json');
 let path    = require('path');
+let moment  = require('moment');
 let discord = require('discord.js-commando');
 let brg     = require('./app/service/brg/brg.js');
 let youtube = require('./app/service/youtube/youtube.js');
+
+let winston = require('winston');
+require('winston-daily-rotate-file');
+
+let logger = new (winston.Logger)({
+	transports: [
+		new (winston.transports.Console)({
+			formatter: function(options) {
+				return moment().format('DD.MM.YYYY, HH:mm:ss') +' '+ options.level.toUpperCase() +' '+ (options.message ? options.message : '') +
+				  (options.meta && Object.keys(options.meta).length ? '\n\t'+ JSON.stringify(options.meta) : '' );
+			}
+		}),
+		new winston.transports.DailyRotateFile({
+			filename: config.logger.filename,
+			datePattern: config.logger.datePattern,
+			prepend: true,
+			level: config.logger.level
+		})
+	]
+});
 
 let client  = new discord.Client({
 	owner: config.discord.ownerId,
@@ -19,7 +40,7 @@ client.on('warn', console.warn);
 client.on('debug', console.log);
 
 client.on('ready', () => {
-	console.log('I am ready!');
+	logger.info('Started and ready!');
 });
 
 client.on('message', message => {
@@ -27,19 +48,19 @@ client.on('message', message => {
 
 client.on('commandError', (cmd, err) => {
 	if (err instanceof discord.FriendlyError) return;
-	console.error('Error in command ' + cmd.groupID + ':' + cmd.memberName, err);
+	logger.info('Error in command ' + cmd.groupID + ':' + cmd.memberName, err);
 });
 
 client.on('commandBlocked', (msg, reason) => {
-	console.log('Command [' + msg.command.groupID + ':' + msg.command.memberName + '] blocked' + '. Reason: ' + reason);
+	logger.info('Command [' + msg.command.groupID + ':' + msg.command.memberName + '] blocked' + '. Reason: ' + reason);
 });
 
 client.on('commandPrefixChange', (guild, prefix) => {
 	if (prefix === '') {
-		console.log('Prefix removed in guild ' + guild.name + '(' + guild.id + ')');
+		logger.info('Prefix removed in guild ' + guild.name + '(' + guild.id + ')');
 	}
 	else {
-		console.log('Prefix changed to ' + prefix);
+		logger.info('Prefix changed to ' + prefix);
 	}
 });
 
@@ -54,7 +75,7 @@ client.on('commandStatusChange', (guild, command, enabled) => {
 	}
 
 	consoleMessage += ' in guild ' + guild.name + ' (' + guild.id + ')';
-	console.log(consoleMessage);
+	logger.info(consoleMessage);
 });
 
 client.on('groupStatusChange', (guild, group, enabled) => {
@@ -68,12 +89,14 @@ client.on('groupStatusChange', (guild, group, enabled) => {
 	}
 
 	consoleMessage += ' in guild ' + guild.name + ' (' + guild.id + ')';
-	console.log(consoleMessage);
+	logger.info(consoleMessage);
 });
 
 client.login(config.discord.botToken);
 
 exports.config   = config;
+exports.moment   = moment;
+exports.logger   = logger;
 exports.services = {
 	'brg': brg,
 	'youtube': youtube

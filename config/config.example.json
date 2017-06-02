@@ -1,4 +1,9 @@
 {
+	"logger": {
+		"filename": "./log/log",
+		"datePattern": "yyyy-MM-dd.",
+		"level": "debug"
+	},
 	"discord": {
 		"botToken": "",
 		"channelId": "",

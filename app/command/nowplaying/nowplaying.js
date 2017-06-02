@@ -1,5 +1,6 @@
 let app     = require('../../../index.js');
 let discord = require('discord.js-commando');
+let logger  = app.logger;
 
 module.exports = class NowPlayingCommand extends discord.Command {
 	constructor(client) {
@@ -54,12 +55,12 @@ module.exports = class NowPlayingCommand extends discord.Command {
 						return msg.reply(message);
 					})
 					.catch(function(error) {
-						console.error(error);
+						logger.error(error);
 						return msg.reply(message);
 					});
 			})
 			.catch(function(error) {
-				console.error(error);
+				logger.error(error);
 				return msg.reply('Sorry, es gab einen Fehler beim ausführen des Befehls.\nhttps://derpicdn.net/img/2012/6/20/10898/full.gif');
 			});
 	}
