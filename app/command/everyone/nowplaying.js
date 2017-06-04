@@ -1,6 +1,8 @@
 let app     = require('../../../index.js');
 let discord = require('discord.js-commando');
 let logger  = app.logger;
+let brg     = app.services.brg;
+let youtube = app.services.youtube;
 
 module.exports = class NowPlayingCommand extends discord.Command {
 	constructor(client) {
@@ -18,7 +20,7 @@ module.exports = class NowPlayingCommand extends discord.Command {
 	}
 
 	async run(msg, args) {
-		app.services.brg.getNowPlaying()
+		brg.getNowPlaying()
 			.then(function(response) {
 				var message      = '';
 				let upvotes      = response.data.result.upvotes;
@@ -29,7 +31,7 @@ module.exports = class NowPlayingCommand extends discord.Command {
 				let currentEvent = response.data.result.current_event;
 				let listener     = response.data.result.listener;
 
-				if (currentEvent === 'DJ-Pony Lucy') {
+				if (currentEvent === 'DJ-Pony Lucy' || currentEvent === 'DJ-Pony Mary') {
 					message = 'Gerade läuft im Auto-DJ:\n\n';
 				}
 				else {
@@ -47,7 +49,7 @@ module.exports = class NowPlayingCommand extends discord.Command {
 
 				message += listener + '  👥';
 
-				app.services.youtube.getYoutubeVideo(title, artist)
+				youtube.getYouTubeVideo(title, artist)
 					.then(function(response) {
 						if (response.data.items.length > 0) {
 							message += '  |  https://youtu.be/' + response.data.items[0].id.videoId

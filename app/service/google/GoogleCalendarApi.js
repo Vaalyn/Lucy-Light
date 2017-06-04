@@ -1,6 +1,7 @@
 let app    = require('../../../index.js');
 let axios  = require('axios');
 let moment = require('moment');
+let logger = app.logger;
 
 module.exports = class GoogleCalendarApi {
 	static getNextShow() {
@@ -20,7 +21,7 @@ module.exports = class GoogleCalendarApi {
 					resolve(nextShow);
 				})
 				.catch((error) => {
-					console.error(error);
+					logger.error(error);
 					reject(Error(error));
 				})
 		});

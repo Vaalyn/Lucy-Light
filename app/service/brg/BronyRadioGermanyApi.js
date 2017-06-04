@@ -1,4 +1,6 @@
-let axios = require('axios');
+let app    = require('../../../index.js');
+let axios  = require('axios');
+let logger = app.logger;
 
 module.exports = class BronyRadioGermanyApi {
 	static getNowPlaying() {
@@ -8,7 +10,7 @@ module.exports = class BronyRadioGermanyApi {
 					resolve(response);
 				})
 				.catch((error) => {
-					console.error(error);
+					logger.error(error);
 					reject(Error(error));
 				})
 		});

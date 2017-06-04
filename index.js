@@ -2,10 +2,10 @@ let config  = require('./config/config.json');
 let path    = require('path');
 let moment  = require('moment');
 let discord = require('discord.js-commando');
-let brg     = require('./app/service/brg/brg.js');
-let youtube = require('./app/service/youtube/youtube.js');
-let google = {
-	calendar: require('./app/service/google/calendar.js')
+let brg     = require('./app/service/brg/BronyRadioGermanyApi.js');
+let youtube = require('./app/service/youtube/YouTubeApi.js');
+let google  = {
+	calendar: require('./app/service/google/GoogleCalendarApi.js')
 }
 
 let winston = require('winston');
@@ -33,10 +33,8 @@ let client  = new discord.Client({
 	commandPrefix: config.discord.commandPrefix
 });
 
-client.registry
-    .registerGroups(config.discord.commandGroups)
-    .registerDefaults()
-    .registerCommandsIn(path.join(__dirname, 'app/command'));
+let StreamRecording = require('./app/service/recording/StreamRecording.js');
+let recording       = new StreamRecording(logger);
 
 client.on('error', console.error);
 client.on('warn', console.warn);
@@ -44,6 +42,11 @@ client.on('debug', console.log);
 
 client.on('ready', () => {
 	logger.info('Started and ready!');
+
+	client.registry
+	    .registerGroups(config.discord.commandGroups)
+	    .registerDefaults()
+	    .registerCommandsIn(path.join(__dirname, 'app/command'));
 });
 
 client.on('message', message => {
@@ -117,7 +120,8 @@ exports.client   = client;
 exports.config   = config;
 exports.logger   = logger;
 exports.services = {
-	'brg': brg,
-	'youtube': youtube,
-	'google': google
-}
+	brg: brg,
+	youtube: youtube,
+	google: google,
+	recording: recording
+};
