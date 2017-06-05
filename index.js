@@ -133,13 +133,12 @@ let updateNextShow = setInterval(function() {
 				return;
 			}
 
-			if (lastAnnouncedShow.id == nextShow.id && lastAnnouncedShow.status == 'soon') {
-
+			if (lastAnnouncedShow.id === nextShow.id && lastAnnouncedShow.status === 'soon') {
 				if (moment(nextShow.start.dateTime).diff() > config.discord.announceNextShowTimeDifference) {
-					return
+					return;
 				}
 
-				this.lastAnnouncedShow = {
+				lastAnnouncedShow = {
 					id: nextShow.id,
 					status: 'now'
 				}
@@ -156,21 +155,23 @@ let updateNextShow = setInterval(function() {
 				}});
 			}
 
-			lastAnnouncedShow = {
-				id: nextShow.id,
-				status: 'soon'
+			if (lastAnnouncedShow.id !== nextShow.id) {
+				lastAnnouncedShow = {
+					id: nextShow.id,
+					status: 'soon'
+				}
+
+				client.registry.resolveCommand('show').run({reply: (response) => {
+					logger.info(response);
+
+					client.channels.find((channel) => {return channel.id === config.discord.channelId;})
+						.send(response)
+						.then((message) => {})
+						.catch((error) => {
+							logger.error(error);
+						});
+				}});
 			}
-
-			client.registry.resolveCommand('show').run({reply: (response) => {
-				logger.info(response);
-
-				client.channels.find((channel) => {return channel.id === config.discord.channelId;})
-					.send(response)
-					.then((message) => {})
-					.catch((error) => {
-						logger.error(error);
-					});
-			}});
 		})
 		.catch(function(error) {
 			logger.error(error);
