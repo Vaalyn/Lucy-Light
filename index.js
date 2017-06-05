@@ -36,11 +36,18 @@ let client  = new discord.Client({
 let StreamRecording = require('./app/service/recording/StreamRecording.js');
 let recording       = new StreamRecording(logger);
 
+var lastAnnouncedShow = {};
+
 client.on('error', console.error);
 client.on('warn', console.warn);
 client.on('debug', console.log);
 
 client.on('ready', () => {
+	moment.locale('de')
+
+	lastAnnouncedShow.id = '';
+	lastAnnouncedShow.status = '';
+
 	logger.info('Started and ready!');
 
 	client.registry
@@ -115,6 +122,60 @@ let updateNowPlayingStatus = setInterval(function() {
 			client.user.setGame('');
 		});
 }, config.discord.updateNowPlayingStatusInterval);
+
+let updateNextShow = setInterval(function() {
+	google.calendar.getNextShow()
+		.then(function(response) {
+			var nextShow = response;
+			var message  = '';
+
+			if (nextShow === undefined) {
+				return;
+			}
+			
+			if (lastAnnouncedShow.id == nextShow.id && lastAnnouncedShow.status == 'soon') {
+
+				if (moment(nextShow.start.dateTime).diff() > config.discord.announceNextShowTimeDifference) {
+					return
+				}
+
+				this.lastAnnouncedShow = {
+					id: this.nextShow.id,
+					status: 'now'
+				}
+
+				client.registry.resolveCommand('show').run({reply: (response) => {
+					client.channels.find((channel) => {return channel.id === config.discord.channelId;})
+						.send(response)
+		 				.then((message) => {
+							logger.info(message);
+						})
+		 				.catch((error) => {
+							logger.error(error);
+						});
+				}});
+			}
+
+			lastAnnouncedShow = {
+				id: nextShow.id,
+				status: 'soon'
+			}
+
+			client.registry.resolveCommand('show').run({reply: (response) => {
+				client.channels.find((channel) => {return channel.id === config.discord.channelId;})
+					.send(response)
+					.then((message) => {
+						logger.info(message);
+					})
+					.catch((error) => {
+						logger.error(error);
+					});
+			}});
+		})
+		.catch(function(error) {
+			logger.error(error);
+		});
+}, config.discord.updateNextShowInterval);
 
 exports.client   = client;
 exports.config   = config;

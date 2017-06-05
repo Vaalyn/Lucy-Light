@@ -29,7 +29,7 @@ module.exports = class ShowCommand extends discord.Command {
 					return msg.reply(message);
 				}
 
-				message += '\nNächste Sendung:\n**' + nextShow.summary + '**\nvon ' + moment(nextShow.start.dateTime).lang('de').format('dd D. MMMM HH:mm') + ' bis ' + moment(nextShow.end.dateTime).lang('de').format('dd D. MMMM HH:mm') + ' \n'
+				message += '\nNächste Sendung:\n**' + nextShow.summary + '**\nvon ' + moment(nextShow.start.dateTime).format('dd D. MMMM HH:mm') + ' bis ' + moment(nextShow.end.dateTime).format('dd D. MMMM HH:mm') + ' \n'
 
 				message += '```' + nextShow.description + '```'
 
