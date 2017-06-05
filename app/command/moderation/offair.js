@@ -19,6 +19,22 @@ module.exports = class OffAirCommand extends discord.Command {
 		});
 	}
 
+	hasPermission(msg) {
+		var response = false;
+
+		let commandGroupRoles = app.config.discord.commandGroupRoles.find((role) => {
+			return role.group === this.groupID;
+		});
+
+		commandGroupRoles.roles.forEach((role) => {
+			if (msg.member._roles.includes(role)) {
+				response = true;
+			}
+		});
+
+		return response;
+	}
+
 	async run(msg, args) {
 		recording.stop()
 			.then(function(response) {
