@@ -140,7 +140,7 @@ let updateNextShow = setInterval(function() {
 				}
 
 				this.lastAnnouncedShow = {
-					id: this.nextShow.id,
+					id: nextShow.id,
 					status: 'now'
 				}
 
