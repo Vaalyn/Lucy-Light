@@ -8,17 +8,27 @@
 		"botToken": "",
 		"channelId": "",
 		"ownerId": "",
-		"commandPrefix": "!!",
+		"commandPrefix": "!! ",
 		"commandGroups": [
-			["admin", "Administration commands"],
-			["moderation", "Moderation commands"],
-			["everyone", "Public commands"]
+			["admin", "Admin Befehle"],
+			["moderation", "Moderatoren Befehle"],
+			["everyone", "Öffentliche Befehle"]
 		],
-		"updateNowPlayingStatusInterval": 15000
+		"commandGroupRoles": [
+			{
+				"group": "admin",
+				"roles": []
+			},
+			{
+				"group": "moderation",
+				"roles": []
+			}
+		],
+		"updateNowPlayingStatusInterval": 15000,
+		"updateNextShowInterval": 60000,
+		"announceNextShowTimeDifference": 900000
 	},
 	"google": {
-		"calendar": {
-			"apiKey": ""
-		}
+		"apiKey": ""
 	}
 }
