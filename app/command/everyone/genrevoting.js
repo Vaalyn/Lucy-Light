@@ -1,8 +1,6 @@
 let app     = require('../../../index.js');
 let discord = require('discord.js-commando');
 let logger  = app.logger;
-let brg     = app.services.brg;
-let youtube = app.services.youtube;
 
 module.exports = class GenreVotingCommand extends discord.Command {
 	constructor(client) {
