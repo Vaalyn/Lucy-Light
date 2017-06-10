@@ -2,6 +2,7 @@ let config  = require('./config/config.json');
 let path    = require('path');
 let moment  = require('moment');
 let discord = require('discord.js-commando');
+let twitter = require('twitter');
 let brg     = require('./app/service/brg/BronyRadioGermanyApi.js');
 let youtube = require('./app/service/youtube/YouTubeApi.js');
 let google  = {
@@ -26,6 +27,13 @@ let logger = new (winston.Logger)({
 			level: config.logger.level
 		})
 	]
+});
+
+let twitterClient = new twitter({
+	consumer_key: config.twitter.consumerKey,
+	consumer_secret: config.twitter.consumerSecret,
+	access_token_key: config.twitter.accessTokenKey,
+	access_token_secret: config.twitter.accessTokenSecret
 });
 
 let client  = new discord.Client({
@@ -185,5 +193,6 @@ exports.services = {
 	brg: brg,
 	youtube: youtube,
 	google: google,
-	recording: recording
+	recording: recording,
+	twitter: twitterClient
 };

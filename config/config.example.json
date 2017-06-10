@@ -30,5 +30,11 @@
 	},
 	"google": {
 		"apiKey": ""
+	},
+	"twitter": {
+		"consumerKey": "",
+		"consumerSecret": "",
+		"accessTokenKey": "",
+		"accessTokenSecret": ""
 	}
 }
