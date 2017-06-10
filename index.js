@@ -41,6 +41,8 @@ let client  = new discord.Client({
 	commandPrefix: config.discord.commandPrefix
 });
 
+let TwitterHelper   = require('./app/service/twitter/TwitterHelper.js');
+let twitterHelper   = new TwitterHelper(logger, google, twitterClient);
 let StreamRecording = require('./app/service/recording/StreamRecording.js');
 let recording       = new StreamRecording(logger);
 
@@ -194,5 +196,6 @@ exports.services = {
 	youtube: youtube,
 	google: google,
 	recording: recording,
-	twitter: twitterClient
+	twitter: twitterClient,
+	twitterHelper: twitterHelper
 };

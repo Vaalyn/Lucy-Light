@@ -1,8 +1,9 @@
-let app       = require('../../../index.js');
-let discord   = require('discord.js-commando');
-let logger    = app.logger;
-let client    = app.client;
-let recording = app.services.recording;
+let app           = require('../../../index.js');
+let discord       = require('discord.js-commando');
+let logger        = app.logger;
+let client        = app.client;
+let recording     = app.services.recording;
+let twitterHelper = app.services.twitterHelper;
 
 module.exports = class NextCommand extends discord.Command {
 	constructor(client) {
@@ -43,6 +44,13 @@ module.exports = class NextCommand extends discord.Command {
 
 				recording.start()
 					.then(function(response) {
+						twitterHelper.tweetNextShow()
+							.then((response) => {
+								logger.log(response);
+							})
+							.catch((error) => {
+								logger.error(error)
+							});
 						logger.info('Sendung gestartet von: ' + msg.author.username);
 						return msg.reply('Die nächste Sendung läuft jetzt, gib alles!');
 					})
