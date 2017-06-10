@@ -47,6 +47,7 @@ let StreamRecording = require('./app/service/recording/StreamRecording.js');
 let recording       = new StreamRecording(logger);
 
 var lastAnnouncedShow = {};
+var lastPlayedSong = {};
 
 client.on('error', console.error);
 client.on('warn', console.warn);
@@ -55,8 +56,11 @@ client.on('debug', console.log);
 client.on('ready', () => {
 	moment.locale('de')
 
-	lastAnnouncedShow.id = '';
+	lastAnnouncedShow.id     = '';
 	lastAnnouncedShow.status = '';
+	lastPlayedSong.id        = '';
+	lastPlayedSong.title     = '';
+	lastPlayedSong.artist    = '';
 
 	logger.info('Started and ready!');
 
@@ -120,12 +124,28 @@ client.login(config.discord.botToken);
 let updateNowPlayingStatus = setInterval(function() {
 	brg.getNowPlaying()
 		.then(function(response) {
-			let title      = response.data.result.title;
-			let artist     = response.data.result.artist;
+			let id     = response.data.result.id;
+			let title  = response.data.result.title;
+			let artist = response.data.result.artist;
+
+			if (title.includes('Assertivness') && artist.includes('VSi') && id !== lastPlayedSong.id) {
+				client.channels.find((channel) => {return channel.id === config.discord.channelId;})
+					.send('https://orig05.deviantart.net/b7b5/f/2013/268/8/0/fluttertrain_by_bronycopter-d6ntenh.gif')
+					.then((message) => {})
+					.catch((error) => {
+						logger.error(error);
+					});
+			}
 
 			logger.info('Set game to "' + title + ' - ' + artist + '"');
 			// TODO: Add check if Twitch Stream is online then set to optional parameter as string
 			client.user.setGame(title + ' - ' + artist);
+
+			lastPlayedSong = {
+				id: id,
+				title: title,
+				artist: artist
+			}
 		})
 		.catch(function(error) {
 			logger.error(error);
