@@ -175,13 +175,6 @@ let updateNextShow = setInterval(function() {
 
 				client.registry.resolveCommand('show').run({reply: (response) => {
 					logger.info(response);
-
-					client.channels.find((channel) => {return channel.id === config.discord.channelId;})
-						.send(response)
-		 				.then((message) => {})
-		 				.catch((error) => {
-							logger.error(error);
-						});
 				}});
 			}
 
@@ -193,13 +186,6 @@ let updateNextShow = setInterval(function() {
 
 				client.registry.resolveCommand('show').run({reply: (response) => {
 					logger.info(response);
-
-					client.channels.find((channel) => {return channel.id === config.discord.channelId;})
-						.send(response)
-						.then((message) => {})
-						.catch((error) => {
-							logger.error(error);
-						});
 				}});
 			}
 		})
