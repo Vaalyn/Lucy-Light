@@ -13,7 +13,7 @@ module.exports = class TweetCommand extends discord.Command {
 			description: 'Sendet einen Tweet auf Twitter',
 			throttling: {
 				usages: 3,
-				duration: 60
+				duration: 900
 			},
 			args: [
 				{
