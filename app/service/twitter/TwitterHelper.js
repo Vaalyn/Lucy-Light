@@ -25,18 +25,18 @@ module.exports = class TwitterHelper {
 						tweet = '.' + tweet;
 					}
 
-					if (message.length <= 118) {
+					if (tweet.length <= 118) {
 						tweet += ' – jetzt live im #BRG!';
 					}
-					else if (message.length <= 103) {
+					else if (tweet.length <= 103) {
 						tweet += ' – jetzt live im Brony Radio Germany!';
 					}
 
-					if (message.length < 133) {
+					if (tweet.length < 133) {
 						tweet += ' #Brony';
 					}
 
-					if (message.length <  135) {
+					if (tweet.length <  135) {
 						tweet += ' #MLP';
 					}
 
