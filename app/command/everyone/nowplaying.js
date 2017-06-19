@@ -8,7 +8,7 @@ module.exports = class NowPlayingCommand extends discord.Command {
 	constructor(client) {
 		super(client, {
 			name: 'nowplaying',
-			aliases: ['nowplaying'],
+			aliases: ['nowplaying', 'song'],
 			group: 'everyone',
 			memberName: 'nowplaying',
 			description: 'Zeigt das aktuelle Lied an',
