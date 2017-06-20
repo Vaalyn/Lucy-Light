@@ -5,6 +5,7 @@ module.exports = class SourceCommand extends discord.Command {
 	constructor(client) {
 		super(client, {
 			name: 'source',
+			aliases: ['github', 'code'],
 			group: 'everyone',
 			memberName: 'source',
 			description: 'Postet einen Link zum GitHub Projekt',
