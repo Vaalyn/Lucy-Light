@@ -11,7 +11,7 @@ module.exports = class MemeCommand extends discord.Command {
 			aliases: Object.keys(JSON.parse(fs.readFileSync(path.join(__dirname, '/meme/memes.json')))),
 			group: 'everyone',
 			memberName: 'meme',
-			description: 'Postet ein Meme passend zur Person',
+			description: 'Postet ein Meme passend zur Person. Der Name der Person kann auch als Befehl verwendet werden.',
 			throttling: {
 				usages: 3,
 				duration: 60
@@ -81,7 +81,7 @@ module.exports = class MemeCommand extends discord.Command {
 
 	async run(msg, args) {
 		let meme;
-		let message     = 'Sorry, da fällt mir nichts zu ein...';
+		let message     = 'Sorry, da fällt mir nichts zu ein...\nWenn du den Befehl "!! help meme" verwendest, sag ich dir wen ich alles kenne.';
 		let memes       = JSON.parse(fs.readFileSync(path.join(__dirname, '/meme/memes.json')));
 		let memePersons = Object.keys(memes);
 		let memePerson  = memePersons.find(function(memePerson) {
