@@ -47,11 +47,11 @@ let StreamRecording = require('./app/service/recording/StreamRecording.js');
 let recording       = new StreamRecording(logger);
 
 var lastAnnouncedShow = {};
-var lastPlayedSong = {};
+var lastPlayedSong    = {};
 
-client.on('error', console.error);
-client.on('warn', console.warn);
-client.on('debug', console.log);
+client.on('error', (error)   => { logger.error(error); });
+client.on('warn',  (warning) => { logger.warn(warning); });
+client.on('debug', (info)    => { logger.debug(info); });
 
 client.on('ready', () => {
 	moment.locale('de')
