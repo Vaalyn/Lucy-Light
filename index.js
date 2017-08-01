@@ -56,11 +56,18 @@ client.on('debug', (info)    => { logger.debug(info); });
 client.on('ready', () => {
 	moment.locale('de')
 
-	lastAnnouncedShow.id     = '';
-	lastAnnouncedShow.status = '';
-	lastPlayedSong.id        = '';
-	lastPlayedSong.title     = '';
-	lastPlayedSong.artist    = '';
+	// Only set these values if Lucy ist started for the first time
+	if (Object.keys(lastAnnouncedShow).length === 0) {
+		lastAnnouncedShow.id     = '';
+		lastAnnouncedShow.status = '';
+	}
+
+	// Only set these values if Lucy ist started for the first time
+	if (Object.keys(lastPlayedSong).length === 0) {
+		lastPlayedSong.id        = '';
+		lastPlayedSong.title     = '';
+		lastPlayedSong.artist    = '';
+	}
 
 	logger.info('Started and ready!');
 
