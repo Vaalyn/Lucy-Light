@@ -46,6 +46,7 @@ let twitterHelper   = new TwitterHelper(logger, google, twitterClient);
 let StreamRecording = require('./app/service/recording/StreamRecording.js');
 let recording       = new StreamRecording(logger);
 
+var isConnected       = false;
 var lastAnnouncedShow = {};
 var lastPlayedSong    = {};
 
@@ -69,12 +70,18 @@ client.on('ready', () => {
 		lastPlayedSong.artist    = '';
 	}
 
+	isConnected = true;
+
 	logger.info('Started and ready!');
 
 	client.registry
 	    .registerGroups(config.discord.commandGroups)
 	    .registerDefaults()
 	    .registerCommandsIn(path.join(__dirname, 'app/command'));
+});
+
+client.on('disconnected', message => {
+	isConnected = false;
 });
 
 client.on('message', message => {
@@ -144,9 +151,11 @@ let updateNowPlayingStatus = setInterval(function() {
 					});
 			}
 
-			logger.info('Set game to "' + title + ' - ' + artist + '"');
-			// TODO: Add check if Twitch Stream is online then set to optional parameter as string
-			client.user.setGame(title + ' - ' + artist);
+			if (isConnected) {
+				logger.info('Set game to "' + title + ' - ' + artist + '"');
+				// TODO: Add check if Twitch Stream is online then set to optional parameter as string
+				client.user.setGame(title + ' - ' + artist);
+			}
 
 			lastPlayedSong = {
 				id: id,
@@ -156,7 +165,9 @@ let updateNowPlayingStatus = setInterval(function() {
 		})
 		.catch(function(error) {
 			logger.error(error);
-			client.user.setGame('');
+			if (isConnected) {
+				client.user.setGame('');
+			}
 		});
 }, config.discord.updateNowPlayingStatusInterval);
 
