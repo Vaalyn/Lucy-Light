@@ -11,7 +11,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "axios": "^0.16.2",
-    "discord.js": "^11.1.0",
+    "discord.js": "github:hydrabolt/discord.js#11.1-dev",
     "discord.js-commando": "^0.9.0",
     "moment": "^2.18.1",
     "twitter": "^1.7.0",
