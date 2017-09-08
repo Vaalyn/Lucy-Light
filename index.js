@@ -60,7 +60,7 @@ client.on('ready', () => {
 	// Only set these values if Lucy ist started for the first time
 	if (Object.keys(lastAnnouncedShow).length === 0) {
 		lastAnnouncedShow.id     = '';
-		lastAnnouncedShow.status = '';
+		lastAnnouncedShow.status = 'soon';
 	}
 
 	// Only set these values if Lucy ist started for the first time
