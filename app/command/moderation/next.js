@@ -21,7 +21,9 @@ module.exports = class NextCommand extends discord.Command {
 	}
 
 	hasPermission(msg) {
-		var response = false;
+		if (msg.channel.type !== 'text') {
+			return false;
+		}
 
 		let commandGroupRoles = app.config.discord.commandGroupRoles.find((role) => {
 			return role.group === this.groupID;
@@ -29,11 +31,11 @@ module.exports = class NextCommand extends discord.Command {
 
 		commandGroupRoles.roles.forEach((role) => {
 			if (msg.member._roles.includes(role)) {
-				response = true;
+				return true;
 			}
 		});
 
-		return response;
+		return false;
 	}
 
 	async run(msg, args) {
