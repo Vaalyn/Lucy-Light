@@ -36,5 +36,15 @@
 		"consumerSecret": "",
 		"accessTokenKey": "",
 		"accessTokenSecret": ""
+	},
+	"brg": {
+		"authToken": ""
+	},
+	"listener": {
+		"message": {
+			"coins": {
+				"timeBetweenEvents": 60000
+			}
+		}
 	}
 }

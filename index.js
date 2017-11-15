@@ -1,13 +1,18 @@
-let config  = require('./config/config.json');
-let path    = require('path');
-let moment  = require('moment');
-let discord = require('discord.js-commando');
-let twitter = require('twitter');
-let brg     = require('./app/service/brg/BronyRadioGermanyApi.js');
-let youtube = require('./app/service/youtube/YouTubeApi.js');
-let google  = {
+let config   = require('./config/config.json');
+let path     = require('path');
+let moment   = require('moment');
+let discord  = require('discord.js-commando');
+let twitter  = require('twitter');
+let brg      = require('./app/service/brg/BronyRadioGermanyApi.js');
+let youtube  = require('./app/service/youtube/YouTubeApi.js');
+let google   = {
 	calendar: require('./app/service/google/GoogleCalendarApi.js')
-}
+};
+
+let listener = {
+	coins: require('./app/listener/message/coins/CoinsMessageListener.js')
+};
+let coinsMessageListener = new listener.coins();
 
 let winston = require('winston');
 require('winston-daily-rotate-file');
@@ -85,6 +90,7 @@ client.on('disconnected', message => {
 });
 
 client.on('message', message => {
+	coinsMessageListener.parseMessage(message);
 });
 
 client.on('commandError', (cmd, err) => {
