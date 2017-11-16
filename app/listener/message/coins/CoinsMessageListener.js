@@ -17,25 +17,22 @@ module.exports = class CoinsMessageListener {
 			return;
 		}
 
-		let username = this.usernameFromMessage(message);
-		let timeSinceLastEvent = this.timeSinceLastCoinEventForUsername(username);
+		let userId = message.author.id;
+		let username = message.author.tag;
+		let timeSinceLastEvent = this.timeSinceLastCoinEventForUser(userId);
 
 		if (timeSinceLastEvent > app.config.listener.message.coins.timeBetweenEvents) {
-			this.users[username] = moment();
+			this.users[userId] = moment();
 
 			let coins = Math.floor(Math.random() * 5) + 1;
 
-			app.services.brg.addCommunityUserCoins(username, coins);
+			app.services.brg.addCommunityUserCoins(username, userId, coins);
 		}
 	}
 
-	usernameFromMessage(message) {
-		return message.author.username + '#' + message.author.discriminator;
-	}
-
-	timeSinceLastCoinEventForUsername(username) {
-		if (username in this.users) {
-			return moment() - this.users[username];
+	timeSinceLastCoinEventForUser(userId) {
+		if (userId in this.users) {
+			return moment() - this.users[userId];
 		}
 
 		return Number.MAX_VALUE;

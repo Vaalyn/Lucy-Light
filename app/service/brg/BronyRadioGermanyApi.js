@@ -16,9 +16,9 @@ module.exports = class BronyRadioGermanyApi {
 		});
 	}
 
-	static getCommunityUserCoins(discordUsername) {
+	static getCommunityUserCoins(discordUserId) {
 		return new Promise(function(resolve, reject) {
-			axios.get('https://panel.bronyradiogermany.com/api/communtiy/user/coin/' + encodeURIComponent(discordUsername))
+			axios.get('https://panel.bronyradiogermany.com/api/communtiy/user/coin/' + encodeURIComponent(discordUserId))
 				.then((response) => {
 					resolve(response);
 				})
@@ -29,10 +29,11 @@ module.exports = class BronyRadioGermanyApi {
 		});
 	}
 
-	static addCommunityUserCoins(discordUsername, coins) {
+	static addCommunityUserCoins(discordUsername, discordUserId, coins) {
 		return new Promise(function(resolve, reject) {
 			axios.post('https://panel.bronyradiogermany.com/api/communtiy/user/coin/add' + '?authorizationToken=' + app.config.brg.authToken, {
 				discordUsername: discordUsername,
+				discordUserId: discordUserId,
 				coins: coins
 			})
 				.then((response) => {
