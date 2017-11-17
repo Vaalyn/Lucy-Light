@@ -18,13 +18,13 @@ module.exports = class CoinsCommand extends discord.Command {
 	}
 
 	async run(msg, args) {
-		app.services.brg.getCommunityUserCoins(msg.author.username + '#' + msg.author.discriminator)
+		app.services.brg.getCommunityUserCoins(msg.author.id)
 			.then(function(response) {
 				let richEmbed = { embed: {
 					color: 6360082,
 					title: '**Dein aktueller Kontostand**\n\n',
 					description: ':moneybag: ' + response.data.result.coins + ' Bits'
-				}};
+				}}
 
 				return msg.channel.send("", richEmbed);
 			})
