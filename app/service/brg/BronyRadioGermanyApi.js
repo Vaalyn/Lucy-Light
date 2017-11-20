@@ -11,7 +11,7 @@ module.exports = class BronyRadioGermanyApi {
 				})
 				.catch((error) => {
 					logger.error(error);
-					reject(Error(error));
+					reject(error);
 				})
 		});
 	}
@@ -24,7 +24,7 @@ module.exports = class BronyRadioGermanyApi {
 				})
 				.catch((error) => {
 					logger.error(error);
-					reject(Error(error));
+					reject(error);
 				})
 		});
 	}
@@ -41,7 +41,7 @@ module.exports = class BronyRadioGermanyApi {
 				})
 				.catch((error) => {
 					logger.error(error);
-					reject(Error(error));
+					reject(error);
 				})
 		});
 	}

@@ -22,7 +22,7 @@ module.exports = class GoogleCalendarApi {
 				})
 				.catch((error) => {
 					logger.error(error);
-					reject(Error(error));
+					reject(error);
 				})
 		});
 	}

@@ -11,7 +11,7 @@ module.exports = class YouTubeApi {
 				})
 				.catch((error) => {
 					logger.error(error);
-					reject(Error(error));
+					reject(error);
 				})
 		});
 	}

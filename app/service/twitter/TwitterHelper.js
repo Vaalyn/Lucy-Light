@@ -43,7 +43,7 @@ module.exports = class TwitterHelper {
 					self.twitter.post('statuses/update', {status: tweet}, (error, tweet, response) => {
 						if (error) {
 							self.logger.error(error);
-							reject(Error(error));
+							reject(error);
 						}
 
 						resolve(response);
@@ -51,7 +51,7 @@ module.exports = class TwitterHelper {
 				})
 				.catch(function(error) {
 					self.logger.error(error);
-					reject(Error(error));
+					reject(error);
 				});
 		});
 	}
