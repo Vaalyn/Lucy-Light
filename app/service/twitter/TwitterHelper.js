@@ -12,7 +12,8 @@ module.exports = class TwitterHelper {
 			self.google.calendar.getNextShow()
 				.then(function(response) {
 					let nextShow = response;
-					let tweet    = '';
+					let tweet = '';
+					let tweetUnusedCharacters = () => { return app.config.twitter.tweet.maxLength - tweet.length };
 
 					if (nextShow !== undefined) {
 						tweet += nextShow.summary;
@@ -25,18 +26,17 @@ module.exports = class TwitterHelper {
 						tweet = '.' + tweet;
 					}
 
-					if (tweet.length <= 118) {
+					if (tweetUnusedCharacters() >= 37) {
+						tweet += ' – jetzt live im Brony Radio Germany!';
+					} else if (tweetUnusedCharacters() >= 22) {
 						tweet += ' – jetzt live im #BRG!';
 					}
-					else if (tweet.length <= 103) {
-						tweet += ' – jetzt live im Brony Radio Germany!';
-					}
 
-					if (tweet.length < 133) {
+					if (tweetUnusedCharacters() >= 7) {
 						tweet += ' #Brony';
 					}
 
-					if (tweet.length <  135) {
+					if (tweetUnusedCharacters() >= 5) {
 						tweet += ' #MLP';
 					}
 

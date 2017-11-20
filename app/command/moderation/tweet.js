@@ -50,8 +50,8 @@ module.exports = class TweetCommand extends discord.Command {
 		let message          = args.tweet;
 		let tweetLengthCount = message.length;
 
-		if (tweetLengthCount > 140) {
-			return msg.reply('Dein Tweet ist um ' + (tweetLengthCount - 140) + ' Zeichen zu lang.');
+		if (tweetLengthCount > app.config.twitter.tweet.maxLength) {
+			return msg.reply('Dein Tweet ist um ' + (tweetLengthCount - app.config.twitter.tweet.maxLength) + ' Zeichen zu lang.');
 		}
 
 		twitter.post('statuses/update', {status: message}, (error, tweet, response) => {
