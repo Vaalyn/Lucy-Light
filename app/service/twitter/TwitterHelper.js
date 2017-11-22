@@ -1,5 +1,6 @@
 module.exports = class TwitterHelper {
-	constructor(logger, google, twitter) {
+	constructor(config, logger, google, twitter) {
+		this.config  = config;
 		this.logger  = logger;
 		this.google  = google;
 		this.twitter = twitter;
@@ -13,7 +14,7 @@ module.exports = class TwitterHelper {
 				.then(function(response) {
 					let nextShow = response;
 					let tweet = '';
-					let tweetUnusedCharacters = () => { return app.config.twitter.tweet.maxLength - tweet.length };
+					let tweetUnusedCharacters = () => { return self.config.twitter.tweet.maxLength - tweet.length };
 
 					if (nextShow !== undefined) {
 						tweet += nextShow.summary;

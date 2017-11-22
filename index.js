@@ -47,7 +47,7 @@ let client  = new discord.Client({
 });
 
 let TwitterHelper   = require('./app/service/twitter/TwitterHelper.js');
-let twitterHelper   = new TwitterHelper(logger, google, twitterClient);
+let twitterHelper   = new TwitterHelper(config, logger, google, twitterClient);
 let StreamRecording = require('./app/service/recording/StreamRecording.js');
 let recording       = new StreamRecording(logger);
 
