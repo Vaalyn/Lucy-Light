@@ -24,9 +24,9 @@ module.exports = class CoinsCommand extends discord.Command {
 					color: 6360082,
 					title: '**Dein aktueller Kontostand**\n\n',
 					description: ':moneybag: ' + response.data.result.coins + ' Bits'
-				}}
+				}};
 
-				return msg.channel.send("", richEmbed);
+				return msg.channel.send('', richEmbed);
 			})
 			.catch(function(error) {
 				logger.error(error);
