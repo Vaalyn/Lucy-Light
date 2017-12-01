@@ -45,4 +45,21 @@ module.exports = class BronyRadioGermanyApi {
 				})
 		});
 	}
+
+	static removeCommunityUserCoins(discordUsername, discordUserId, coins) {
+		return new Promise(function(resolve, reject) {
+			axios.post('https://panel.bronyradiogermany.com/api/communtiy/user/coin/remove' + '?authorizationToken=' + app.config.brg.authToken, {
+				discordUsername: discordUsername,
+				discordUserId: discordUserId,
+				coins: coins
+			})
+				.then((response) => {
+					resolve(response);
+				})
+				.catch((error) => {
+					logger.error(error);
+					reject(error);
+				})
+		});
+	}
 }
