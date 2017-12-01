@@ -46,10 +46,10 @@ module.exports = class PayCommand extends discord.Command {
 					return msg.reply('Warum sollte ich deine Bits an dich selbst überweisen?');
 				}
 
-				app.services.brg.removeCommunityUserCoins(msg.author.tag, msg.author.id, coins)
+				app.services.brg.removeCommunityUserCoins(msg.author.tag, msg.author.id, bits)
 					.then((response) => {
 						if (response.data.status === 'success') {
-							app.services.brg.addCommunityUserCoins(recipient.user.tag, recipient.user.id, coins)
+							app.services.brg.addCommunityUserCoins(recipient.user.tag, recipient.user.id, bits)
 								.catch((error) => {
 									logger.error(error);
 									return msg.reply('Entschuldige, ich konnte deine Bits nicht an ' + recipient + ' auszahlen');
