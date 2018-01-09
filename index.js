@@ -108,38 +108,17 @@ client.on('commandBlocked', (msg, reason) => {
 });
 
 client.on('commandPrefixChange', (guild, prefix) => {
-	if (prefix === '') {
-		logger.info('Prefix removed in guild ' + guild.name + '(' + guild.id + ')');
-	}
-	else {
-		logger.info('Prefix changed to ' + prefix);
-	}
+	logger.info('Set Prefix in guild ' + guild.name + '(' + guild.id + ') to "' + prefix + '"');
 });
 
 client.on('commandStatusChange', (guild, command, enabled) => {
-	var consoleMessage = 'Command ' + command.groupID + ':' + command.memberName + ' ';
-
-	if (enabled) {
-		consoleMessage += 'enabled';
-	}
-	else {
-		consoleMessage += 'disabled';
-	}
-
+	var consoleMessage = 'Set Command ' + command.groupID + ':' + command.memberName + ' to enabled=' + enabled;
 	consoleMessage += ' in guild ' + guild.name + ' (' + guild.id + ')';
 	logger.info(consoleMessage);
 });
 
 client.on('groupStatusChange', (guild, group, enabled) => {
-	var consoleMessage = 'Group ' + group.id + ' ';
-
-	if (enabled) {
-		consoleMessage += 'enabled';
-	}
-	else {
-		consoleMessage += 'disabled';
-	}
-
+	var consoleMessage = 'Set Group ' + group.id + ' to enabled=' + enabled;
 	consoleMessage += ' in guild ' + guild.name + ' (' + guild.id + ')';
 	logger.info(consoleMessage);
 });
