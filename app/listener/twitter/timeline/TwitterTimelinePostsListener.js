@@ -27,6 +27,10 @@ module.exports = class TwitterTimelinePostsListener {
 		}, self.config.listener.twitter.timeline.listenerIntervall)
 	}
 
+	stopListening() {
+		clearInterval(this.listenerInterval);
+	}
+
 	processTweets(tweets) {
 		for (let tweet of tweets) {
 			if (this.shouldTweetBeAnnounced(tweet)) {
