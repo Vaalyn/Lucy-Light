@@ -9,12 +9,6 @@ let google   = {
 	calendar: require('./app/service/google/GoogleCalendarApi.js')
 };
 
-let listener = {
-	coins: require('./app/listener/message/coins/CoinsMessageListener.js'),
-	twitterTimeline: require('./app/listener/twitter/timeline/TwitterTimelinePostsListener.js')
-};
-let coinsMessageListener = new listener.coins();
-
 let winston = require('winston');
 require('winston-daily-rotate-file');
 
@@ -49,14 +43,20 @@ let client  = new discord.Client({
 
 let TwitterHelper           = require('./app/service/twitter/TwitterHelper.js');
 let twitterHelper           = new TwitterHelper(config, logger, google, twitterClient);
-let twitterTimelineListener = new listener.twitterTimeline(config, logger);
 
 let StreamRecording = require('./app/service/recording/StreamRecording.js');
 let recording       = new StreamRecording(logger);
 
-var isConnected       = false;
-var lastAnnouncedShow = {};
-var lastPlayedSong    = {};
+let listener = {
+	coins: require('./app/listener/message/coins/CoinsMessageListener.js'),
+	twitterTimeline: require('./app/listener/twitter/timeline/TwitterTimelinePostsListener.js'),
+	brgNowPlaying: require('./app/listener/brg/NowPlayingListener.js'),
+	brgNextShow: require('./app/listener/brg/NextShowListener.js')
+};
+let coinsMessageListener    = new listener.coins();
+let twitterTimelineListener = new listener.twitterTimeline(config, logger);
+let brgNowPlayingListener   = new listener.brgNowPlaying(config, logger, brg);
+let brgNextShowListener     = new listener.brgNextShow(config, logger, google);
 
 client.on('error', (error)   => { logger.error(error); });
 client.on('warn',  (warning) => { logger.warn(warning); });
@@ -65,33 +65,21 @@ client.on('debug', (info)    => { logger.debug(info); });
 client.on('ready', () => {
 	moment.locale('de')
 
-	// Only set these values if Lucy ist started for the first time
-	if (Object.keys(lastAnnouncedShow).length === 0) {
-		lastAnnouncedShow.id     = '';
-		lastAnnouncedShow.status = 'soon';
-	}
-
-	// Only set these values if Lucy ist started for the first time
-	if (Object.keys(lastPlayedSong).length === 0) {
-		lastPlayedSong.id        = '';
-		lastPlayedSong.title     = '';
-		lastPlayedSong.artist    = '';
-	}
-
-	isConnected = true;
-
-	logger.info('Started and ready!');
-
 	client.registry
 	    .registerGroups(config.discord.commandGroups)
 	    .registerDefaults()
 	    .registerCommandsIn(path.join(__dirname, 'app/command'));
 
 	twitterTimelineListener.startListening();
+	brgNowPlayingListener.startListening();
+	brgNextShowListener.startListening();
+
+	logger.info('Started and ready!');
 });
 
 client.on('disconnected', message => {
-	isConnected = false;
+	brgNowPlayingListener.stopListening();
+	brgNextShowListener.stopListening();
 });
 
 client.on('message', message => {
@@ -124,83 +112,6 @@ client.on('groupStatusChange', (guild, group, enabled) => {
 });
 
 client.login(config.discord.botToken);
-
-let updateNowPlayingStatus = setInterval(function() {
-	brg.getNowPlaying()
-		.then(function(response) {
-			let id     = response.data.result.id;
-			let title  = response.data.result.title;
-			let artist = response.data.result.artist;
-
-			if (title.includes('Assertivness') && artist.includes('VSi') && id !== lastPlayedSong.id) {
-				client.channels.find((channel) => {return channel.id === config.discord.channelId;})
-					.send('https://orig05.deviantart.net/b7b5/f/2013/268/8/0/fluttertrain_by_bronycopter-d6ntenh.gif')
-					.then((message) => {})
-					.catch((error) => {
-						logger.error(error);
-					});
-			}
-
-			if (isConnected) {
-				logger.info('Set game to "' + title + ' - ' + artist + '"');
-				// TODO: Add check if Twitch Stream is online then set to optional parameter as string
-				client.user.setGame(title + ' - ' + artist);
-			}
-
-			lastPlayedSong = {
-				id: id,
-				title: title,
-				artist: artist
-			}
-		})
-		.catch(function(error) {
-			logger.error(error);
-			if (isConnected) {
-				client.user.setGame('');
-			}
-		});
-}, config.discord.updateNowPlayingStatusInterval);
-
-let updateNextShow = setInterval(function() {
-	google.calendar.getNextShow()
-		.then(function(response) {
-			var nextShow = response;
-			var message  = '';
-
-			if (nextShow === undefined) {
-				return;
-			}
-
-			if (lastAnnouncedShow.id === nextShow.id && lastAnnouncedShow.status === 'soon') {
-				if (moment(nextShow.start.dateTime).diff() > config.discord.announceNextShowTimeDifference) {
-					return;
-				}
-
-				lastAnnouncedShow = {
-					id: nextShow.id,
-					status: 'now'
-				}
-
-				client.registry.resolveCommand('show').run({reply: (response) => {
-					logger.info(response);
-				}});
-			}
-
-			if (lastAnnouncedShow.id !== nextShow.id) {
-				lastAnnouncedShow = {
-					id: nextShow.id,
-					status: 'soon'
-				}
-
-				client.registry.resolveCommand('show').run({reply: (response) => {
-					logger.info(response);
-				}});
-			}
-		})
-		.catch(function(error) {
-			logger.error(error);
-		});
-}, config.discord.updateNextShowInterval);
 
 exports.client   = client;
 exports.config   = config;
