@@ -10,7 +10,8 @@ let google   = {
 };
 
 let listener = {
-	coins: require('./app/listener/message/coins/CoinsMessageListener.js')
+	coins: require('./app/listener/message/coins/CoinsMessageListener.js'),
+	twitterTimeline: require('./app/listener/twitter/timeline/TwitterTimelinePostsListener.js')
 };
 let coinsMessageListener = new listener.coins();
 
@@ -46,8 +47,10 @@ let client  = new discord.Client({
 	commandPrefix: config.discord.commandPrefix
 });
 
-let TwitterHelper   = require('./app/service/twitter/TwitterHelper.js');
-let twitterHelper   = new TwitterHelper(config, logger, google, twitterClient);
+let TwitterHelper           = require('./app/service/twitter/TwitterHelper.js');
+let twitterHelper           = new TwitterHelper(config, logger, google, twitterClient);
+let twitterTimelineListener = new listener.twitterTimeline(config, logger);
+
 let StreamRecording = require('./app/service/recording/StreamRecording.js');
 let recording       = new StreamRecording(logger);
 
@@ -83,6 +86,8 @@ client.on('ready', () => {
 	    .registerGroups(config.discord.commandGroups)
 	    .registerDefaults()
 	    .registerCommandsIn(path.join(__dirname, 'app/command'));
+
+	twitterTimelineListener.startListening();
 });
 
 client.on('disconnected', message => {

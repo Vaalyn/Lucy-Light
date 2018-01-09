@@ -56,4 +56,19 @@ module.exports = class TwitterHelper {
 				});
 		});
 	}
+
+	getTimeline() {
+		let self = this;
+
+		return new Promise(function(resolve, reject) {
+			self.twitter.get('statuses/user_timeline', {screen_name: self.config.twitter.screenName}, function(error, tweets, response) {
+				if (error) {
+					self.logger.error(error);
+					reject(error);
+				}
+
+				resolve(tweets);
+			})
+		});
+	}
 }

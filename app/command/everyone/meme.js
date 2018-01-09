@@ -30,7 +30,7 @@ module.exports = class MemeCommand extends discord.Command {
 
 	createMemeRichEmbed(meme) {
 		var richMeme = {
-			color: 6360082
+			color: app.config.discord.embed.color
 		}
 
 		if (meme.hasOwnProperty('author')) {
@@ -108,7 +108,7 @@ module.exports = class MemeCommand extends discord.Command {
 		}
 		else {
 			let richMeme = this.createMemeRichEmbed(meme);
-			return msg.channel.send("", { embed: richMeme });
+			return msg.channel.send('', { embed: richMeme });
 		}
 	}
 };

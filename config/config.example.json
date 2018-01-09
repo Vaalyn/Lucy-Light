@@ -26,7 +26,10 @@
 		],
 		"updateNowPlayingStatusInterval": 15000,
 		"updateNextShowInterval": 60000,
-		"announceNextShowTimeDifference": 900000
+		"announceNextShowTimeDifference": 900000,
+		"embed": {
+			"color": 6360082
+		}
 	},
 	"google": {
 		"apiKey": ""
@@ -38,7 +41,8 @@
 		"accessTokenSecret": "",
 		"tweet": {
 			"maxLength": 280
-		}
+		},
+		"screenName": ""
 	},
 	"brg": {
 		"authToken": ""
@@ -47,6 +51,11 @@
 		"message": {
 			"coins": {
 				"timeBetweenEvents": 60000
+			}
+		},
+		"twitter": {
+			"timeline": {
+				"listenerIntervall": 60000
 			}
 		}
 	}
