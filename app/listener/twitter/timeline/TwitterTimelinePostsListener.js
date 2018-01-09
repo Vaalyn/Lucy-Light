@@ -8,7 +8,7 @@ module.exports = class TwitterTimelinePostsListener {
 
 		this.startedAt = 0;
 		this.announcedPosts = [];
-		this.listenerIntervall = null;
+		this.listenerInterval = null;
 	}
 
 	startListening() {
@@ -16,7 +16,7 @@ module.exports = class TwitterTimelinePostsListener {
 
 		this.startedAt = moment();
 
-		this.listenerIntervall = setInterval(function() {
+		this.listenerInterval = setInterval(function() {
 			app.services.twitterHelper.getTimeline()
 				.then(function(response) {
 					self.processTweets(response);
