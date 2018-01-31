@@ -40,13 +40,16 @@ module.exports = class ShowCommand extends discord.Command {
 						{
 							name: 'Ende:',
 							value: moment(nextShow.end.dateTime).format('dd D. MMMM HH:mm')
-						},
-						{
-							name: 'Beschreibung:',
-							value: '```' + nextShow.description + '```'
 						}
 					]
 				}};
+
+				if (nextShow.description) {
+					richEmbed.embed.fields.push({
+						name: 'Beschreibung:',
+						value: '```' + nextShow.description + '```'
+					});
+				}
 
 				if (msg.channel !== undefined) {
 					return msg.channel.send("", richEmbed);
