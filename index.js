@@ -4,6 +4,7 @@ let moment   = require('moment');
 let discord  = require('discord.js-commando');
 let twitter  = require('twitter');
 let brg      = require('./app/service/brg/BronyRadioGermanyApi.js');
+let twitch   = require('./app/service/twitch/TwitchApi.js');
 let youtube  = require('./app/service/youtube/YouTubeApi.js');
 let google   = {
 	calendar: require('./app/service/google/GoogleCalendarApi.js')
@@ -55,7 +56,7 @@ let listener = {
 };
 let coinsMessageListener    = new listener.coins();
 let twitterTimelineListener = new listener.twitterTimeline(config, logger);
-let brgNowPlayingListener   = new listener.brgNowPlaying(config, logger, brg);
+let brgNowPlayingListener   = new listener.brgNowPlaying(config, logger, brg, twitch);
 let brgNextShowListener     = new listener.brgNextShow(config, logger, google);
 
 client.on('error', (error)   => { logger.error(error); });
