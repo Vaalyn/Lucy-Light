@@ -3,7 +3,7 @@ let axios  = require('axios');
 let logger = app.logger;
 
 module.exports = class TwitchApi {
-	static getStreamOnline() {
+	static isStreamOnline() {
 		return new Promise(function(resolve, reject) {
 			axios.request({
 				method: 'get',

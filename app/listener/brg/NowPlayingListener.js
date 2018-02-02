@@ -30,7 +30,7 @@ module.exports = class BronyRadioGermanyNowPlayingListener {
 
 					self.logger.info('Set game to "' + title + ' - ' + artist + '"');
 
-					let streamIsOnline = await self.twitch.getStreamOnline()
+					let streamIsOnline = await self.twitch.isStreamOnline()
 
 					if (streamIsOnline) {
 						self.logger.info('Twitch stream is online');
