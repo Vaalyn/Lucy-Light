@@ -2,10 +2,11 @@ let app    = require('../../../index.js');
 let moment = require('moment');
 
 module.exports = class BronyRadioGermanyNowPlayingListener {
-	constructor(config, logger, brg) {
+	constructor(config, logger, brg, twitch) {
 		this.config = config;
 		this.logger = logger;
 		this.brg    = brg;
+		this.twitch = twitch;
 
 		this.listenerInterval = null;
 		this.lastPlayedSong = {
@@ -20,7 +21,7 @@ module.exports = class BronyRadioGermanyNowPlayingListener {
 
 		this.listenerInterval = setInterval(function() {
 			self.brg.getNowPlaying()
-				.then(function(response) {
+				.then(async function(response) {
 					let id     = response.data.result.id;
 					let title  = response.data.result.title;
 					let artist = response.data.result.artist;
@@ -28,14 +29,23 @@ module.exports = class BronyRadioGermanyNowPlayingListener {
 					self.sendMessageIfSongIsFluttertrain(title, artist);
 
 					self.logger.info('Set game to "' + title + ' - ' + artist + '"');
-					// TODO: Add check if Twitch Stream is online then set to optional parameter as string
-					app.client.user.setGame(title + ' - ' + artist);
+
+					let streamIsOnline = await self.twitch.isStreamOnline()
+
+					if (streamIsOnline) {
+						self.logger.info('Twitch stream is online');
+						app.client.user.setActivity(title + ' - ' + artist, {
+							url: 'https://twitch.tv/bronyradiogermany'
+						});
+					} else {
+						app.client.user.setActivity(title + ' - ' + artist);
+					}
 
 					self.setLastPlayedSong(id, title, artist);
 				})
 				.catch(function(error) {
 					self.logger.error(error);
-					app.client.user.setGame('');
+					app.client.user.setActivity('');
 				});
 		}, self.config.discord.updateNowPlayingStatusInterval);
 	}
