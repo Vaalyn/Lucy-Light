@@ -32,7 +32,8 @@
 		}
 	},
 	"google": {
-		"apiKey": ""
+		"apiKey": "",
+		"calendarId": "bronyradiogermany%40gmail.com"
 	},
 	"twitter": {
 		"consumerKey": "",
