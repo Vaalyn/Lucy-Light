@@ -27,20 +27,22 @@ module.exports = class BronyRadioGermanyNextShowListener {
 						return;
 					}
 
+					if (self.lastAnnouncedShow.id !== nextShow.id) {
+						let announceAs = (moment(nextShow.start.dateTime).diff() > self.config.discord.announceNextShowTimeDifference) ? 'soon' : 'now';
+
+						self.setLastAnnouncedShow(nextShow.id, announceAs);
+
+						return app.client.registry.resolveCommand('show').run({reply: (response) => {
+							self.logger.info(response);
+						}});
+					}
+
 					if (self.lastAnnouncedShow.id === nextShow.id && self.lastAnnouncedShow.status === 'soon') {
 						if (moment(nextShow.start.dateTime).diff() > self.config.discord.announceNextShowTimeDifference) {
 							return;
 						}
 
 						self.setLastAnnouncedShow(nextShow.id, 'now');
-
-						app.client.registry.resolveCommand('show').run({reply: (response) => {
-							self.logger.info(response);
-						}});
-					}
-
-					if (self.lastAnnouncedShow.id !== nextShow.id) {
-						self.setLastAnnouncedShow(nextShow.id, 'soon');
 
 						app.client.registry.resolveCommand('show').run({reply: (response) => {
 							self.logger.info(response);
