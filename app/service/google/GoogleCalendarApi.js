@@ -6,7 +6,7 @@ let logger = app.logger;
 module.exports = class GoogleCalendarApi {
 	static getNextShow() {
 		return new Promise(function(resolve, reject) {
-			axios.get('https://www.googleapis.com/calendar/v3/calendars/bronyradiogermany%40gmail.com/events?timeMin=' + moment().add(15, 'minutes').toISOString() + '&key=' + app.config.google.apiKey)
+			axios.get('https://www.googleapis.com/calendar/v3/calendars/' + app.config.google.calendarId + '/events?timeMin=' + moment().add(15, 'minutes').toISOString() + '&key=' + app.config.google.apiKey)
 				.then((response) => {
 					var nextShow;
 					let shows = response.data.items;
