@@ -28,12 +28,12 @@ module.exports = class NsfwCommand extends discord.Command {
 		});
 
 		if (memberAlreadyHasRole) {
-			return msg.reply('Du hast bereits die Berechtigung den NSFW Channel sehen zu können :lucy_oO:');
+			return msg.reply('Du hast bereits die Berechtigung den NSFW Channel sehen zu können');
 		}
 
 		msg.member.addRole(app.config.discord.nsfwRoleId)
 			.then(function(response) {
-				return msg.reply('Du kannst jetzt den NSFW Channel sehen und betreten :lucy_cool:');
+				return msg.reply('Du kannst jetzt den NSFW Channel sehen und betreten');
 			})
 			.catch(function(error) {
 				logger.error(error);
