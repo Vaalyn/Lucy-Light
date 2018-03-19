@@ -3,7 +3,7 @@ let discord = require('discord.js-commando');
 let logger  = app.logger;
 let client  = app.client;
 
-module.exports = class RoleCommand extends discord.Command {
+module.exports = class NsfwCommand extends discord.Command {
 	constructor(client) {
 		super(client, {
 			name: 'nsfw',
