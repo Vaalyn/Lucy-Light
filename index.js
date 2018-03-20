@@ -115,7 +115,7 @@ client.on('groupStatusChange', (guild, group, enabled) => {
 });
 
 client.login(config.discord.botToken).then((token) => {
-	store.guild = client.guilds.get(config.discord.channelId);
+	store.guild = client.guilds.get(config.discord.guildId);
 });
 
 exports.client   = client;
