@@ -21,7 +21,12 @@ module.exports = class SfwCommand extends discord.Command {
 	async run(msg, args) {
 		let memberHasRole = false;
 
-		msg.member.roles.forEach((role) => {
+		let guildMember = msg.member;
+		if (guildMember === null) {
+			guildMember = app.store.guild.members.get(msg.author.id);
+		}
+
+		guildMember.roles.forEach((role) => {
 			if (role.id === app.config.discord.nsfwRoleId) {
 				memberHasRole = true;
 			}
@@ -31,7 +36,7 @@ module.exports = class SfwCommand extends discord.Command {
 			return msg.reply('Du hast die Berechtigung den NSFW Channel zu sehen nicht');
 		}
 
-		msg.member.removeRole(app.config.discord.nsfwRoleId)
+		guildMember.removeRole(app.config.discord.nsfwRoleId)
 			.then(function(response) {
 				return msg.reply('Du kannst den NSFW Channel jetzt nicht mehr sehen');
 			})

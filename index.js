@@ -27,6 +27,7 @@ let logger = new (winston.Logger)({
 	]
 });
 
+let store = {};
 let google = {
 	calendar: new googleCalendar(config, logger)
 };
@@ -113,9 +114,12 @@ client.on('groupStatusChange', (guild, group, enabled) => {
 	logger.info(consoleMessage);
 });
 
-client.login(config.discord.botToken);
+client.login(config.discord.botToken).then((token) => {
+	store.guild = client.guilds.get(config.discord.guildId);
+});
 
 exports.client   = client;
+exports.store    = store;
 exports.config   = config;
 exports.logger   = logger;
 exports.services = {
