@@ -21,7 +21,12 @@ module.exports = class NsfwCommand extends discord.Command {
 	async run(msg, args) {
 		let memberAlreadyHasRole = false;
 
-		msg.member.roles.forEach((role) => {
+		let guildMember = msg.member;
+		if (guildMember === null) {
+			guildMember = app.store.guild.members.get(msg.author.id);
+		}
+
+		guildMember.roles.forEach((role) => {
 			if (role.id === app.config.discord.nsfwRoleId) {
 				memberAlreadyHasRole = true;
 			}
@@ -31,7 +36,7 @@ module.exports = class NsfwCommand extends discord.Command {
 			return msg.reply('Du hast bereits die Berechtigung den NSFW Channel sehen zu können');
 		}
 
-		msg.member.addRole(app.config.discord.nsfwRoleId)
+		guildMember.addRole(app.config.discord.nsfwRoleId)
 			.then(function(response) {
 				return msg.reply('Du kannst jetzt den NSFW Channel sehen und betreten');
 			})
