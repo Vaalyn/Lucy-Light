@@ -1,7 +1,7 @@
 {
 	"logger": {
-		"filename": "./log/log",
-		"datePattern": "yyyy-MM-dd.",
+		"filename": "./log/%DATE%.log",
+		"datePattern": "Y-MM-DD",
 		"level": "debug"
 	},
 	"discord": {

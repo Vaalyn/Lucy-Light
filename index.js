@@ -1,14 +1,12 @@
-let config   = require('./config/config.json');
-let path     = require('path');
-let moment   = require('moment');
-let discord  = require('discord.js-commando');
-let twitter  = require('twitter');
-let brg      = require('./app/service/brg/BronyRadioGermanyApi.js');
-let twitch   = require('./app/service/twitch/TwitchApi.js');
-let youtube  = require('./app/service/youtube/YouTubeApi.js');
-let google   = {
-	calendar: require('./app/service/google/GoogleCalendarApi.js')
-};
+let config         = require('./config/config.json');
+let path           = require('path');
+let moment         = require('moment');
+let discord        = require('discord.js-commando');
+let twitter        = require('twitter');
+let brg            = require('./app/service/brg/BronyRadioGermanyApi.js');
+let twitch         = require('./app/service/twitch/TwitchApi.js');
+let youtube        = require('./app/service/youtube/YouTubeApi.js');
+let googleCalendar = require('./app/service/google/GoogleCalendarApi.js');
 
 let winston = require('winston');
 require('winston-daily-rotate-file');
@@ -24,11 +22,14 @@ let logger = new (winston.Logger)({
 		new winston.transports.DailyRotateFile({
 			filename: config.logger.filename,
 			datePattern: config.logger.datePattern,
-			prepend: true,
 			level: config.logger.level
 		})
 	]
 });
+
+let google = {
+	calendar: new googleCalendar(config, logger)
+};
 
 let twitterClient = new twitter({
 	consumer_key: config.twitter.consumerKey,
