@@ -50,12 +50,12 @@ module.exports = class TweetCommand extends discord.Command {
 	async run(msg, args) {
 		let message = args.tweet;
 
-		let parseResult = twitterText.parseTweet(message).valid
+		let parseResult = twitterText.parseTweet(message).valid;
 		if (!parseResult.valid) {
 			if (parseResult.permillage > 1000) {
-				return msg.reply('Dein Tweet ist zu lang und hat ' + (parseResult.permillage / 10).toFixed(1) + '% der maximalen Länge!')
+				return msg.reply('Dein Tweet ist zu lang und hat ' + (parseResult.permillage / 10).toFixed(1) + '% der maximalen Länge!');
 			} else {
-				return msg.reply('Dein Tweet wurde von Twitter verworfen und als nicht zulässig betrachtet!')
+				return msg.reply('Dein Tweet wurde von Twitter verworfen und als nicht zulässig betrachtet!');
 			}
 		}
 
