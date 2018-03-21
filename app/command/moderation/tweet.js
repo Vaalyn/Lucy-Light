@@ -1,8 +1,9 @@
-let app       = require('../../../index.js');
-let discord   = require('discord.js-commando');
-let logger    = app.logger;
-let client    = app.client;
-let twitter   = app.services.twitter;
+let app         = require('../../../index.js');
+let discord     = require('discord.js-commando');
+let logger      = app.logger;
+let client      = app.client;
+let twitter     = app.services.twitter;
+let twitterText = require('twitter-text');
 
 module.exports = class TweetCommand extends discord.Command {
 	constructor(client) {
@@ -19,7 +20,7 @@ module.exports = class TweetCommand extends discord.Command {
 				{
 					key: 'tweet',
 					label: 'Tweet',
-					prompt: 'Was möchtest du Tweeten? (Max. 140 Zeichen)\n',
+					prompt: 'Was möchtest du Tweeten?\n',
 					type: 'string'
 				}
 			]
@@ -47,11 +48,15 @@ module.exports = class TweetCommand extends discord.Command {
 	}
 
 	async run(msg, args) {
-		let message          = args.tweet;
-		let tweetLengthCount = message.length;
+		let message = args.tweet;
 
-		if (tweetLengthCount > app.config.twitter.tweet.maxLength) {
-			return msg.reply('Dein Tweet ist um ' + (tweetLengthCount - app.config.twitter.tweet.maxLength) + ' Zeichen zu lang.');
+		let parseResult = twitterText.parseTweet(message).valid
+		if (!parseResult.valid) {
+			if (parseResult.permillage > 1000) {
+				return msg.reply('Dein Tweet ist zu lang und hat ' + (parseResult.permillage / 10).toFixed(1) + '% der maximalen Länge!')
+			} else {
+				return msg.reply('Dein Tweet wurde von Twitter verworfen und als nicht zulässig betrachtet!')
+			}
 		}
 
 		twitter.post('statuses/update', {status: message}, (error, tweet, response) => {
