@@ -24,7 +24,6 @@
 				"roles": []
 			}
 		],
-		"nsfwRoleId": "",
 		"updateNowPlayingStatusInterval": 15000,
 		"updateNextShowInterval": 60000,
 		"announceNextShowTimeDifference": 900000,
