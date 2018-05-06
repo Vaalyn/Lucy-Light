@@ -59,7 +59,7 @@ module.exports = class TwitterTimelinePostsListener {
 							value: '@' + tweet.user.screen_name
 						}
 					],
-					url: tweet.user.url
+					url: 'https://twitter.com/' + tweet.user.screen_name + '/status/' + tweet.id_str
 				}
 			})
 			.then((message) => {
