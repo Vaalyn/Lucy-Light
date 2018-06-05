@@ -47,13 +47,9 @@ module.exports = class ShowCommand extends discord.Command {
 				if (nextShow.description) {
 					let description = nextShow.description;
 
-					console.log(description.length);
-
 					if (description.length >= 1024) {
 						description = description.slice(0, 1014) + '...';
 					}
-
-					console.log(description.length);
 
 					richEmbed.embed.fields.push({
 						name: 'Beschreibung:',
