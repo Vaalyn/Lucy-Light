@@ -1,3 +1,5 @@
+let twitterText = require('twitter-text');
+
 module.exports = class TwitterHelper {
 	constructor(config, logger, google, twitter) {
 		this.config  = config;
@@ -14,7 +16,7 @@ module.exports = class TwitterHelper {
 				.then(function(response) {
 					let nextShow = response;
 					let tweet = '';
-					let tweetUnusedCharacters = () => { return self.config.twitter.tweet.maxLength - tweet.length };
+					let tweetUnusedCharacters = () => { return self.config.twitter.tweet.maxLength - twitterText.parseTweet(tweet).weightedLength};
 
 					if (nextShow !== undefined) {
 						tweet += nextShow.summary;
