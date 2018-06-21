@@ -22,9 +22,9 @@ module.exports = class ShowCommand extends discord.Command {
 		app.services.google.calendar.getNextShow()
 			.then(function(response) {
 				var nextShow = response;
-
-				if (nextShow === undefined) {
-					let message = 'Derzeit ist keine Sendung geplant. :lucy_oO:'
+				
+				if (nextShow === undefined || nextShow.visibility === 'private') {
+					let message = 'Derzeit ist keine Sendung geplant.'
 					return msg.reply(message);
 				}
 
