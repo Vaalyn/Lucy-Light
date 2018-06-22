@@ -1,4 +1,5 @@
 let config         = require('./config/config.json');
+let fs             = require('fs');
 let path           = require('path');
 let moment         = require('moment');
 let discord        = require('discord.js-commando');
@@ -61,17 +62,54 @@ let twitterTimelineListener = new listener.twitterTimeline(config, logger);
 let brgNowPlayingListener   = new listener.brgNowPlaying(config, logger, brg, twitch);
 let brgNextShowListener     = new listener.brgNextShow(config, logger, google);
 
+let blacklistCommands = JSON.parse(fs.readFileSync(path.join(__dirname, '/blacklist/commands.json')));
+
+let saveCommandsBlacklist = () => {
+	fs.writeFileSync(
+		path.join(__dirname, '/blacklist/commands.json'),
+		JSON.stringify(blacklistCommands)
+	);
+};
+
+let isUserBlacklistedForCommands = (user) => {
+	return blacklistCommands.users.some(function(blacklistedUser) {
+		if (blacklistedUser.id === user.id) {
+			return true;
+		}
+	});
+};
+
 client.on('error', (error)   => { logger.error(error); });
 client.on('warn',  (warning) => { logger.warn(warning); });
 client.on('debug', (info)    => { logger.debug(info); });
 
 client.on('ready', () => {
-	moment.locale('de')
+	moment.locale('de');
 
 	client.registry
 	    .registerGroups(config.discord.commandGroups)
 	    .registerDefaults()
 	    .registerCommandsIn(path.join(__dirname, 'app/command'));
+
+	client.dispatcher.addInhibitor((msg) => {
+		if (isUserBlacklistedForCommands(msg.author)) {
+			if (msg.channel.type === 'text') {
+				msg.message.delete();
+			}
+
+			msg.author.createDM()
+				.then((channel) => {
+					channel.send('Ich nehme keine Befehle mehr von dir entgegen!');
+				})
+				.catch((error) => {
+					logger.error(error);
+				});
+
+			return 'blacklisted-commands';
+		}
+
+		return false;
+	});
 
 	twitterTimelineListener.startListening();
 	brgNowPlayingListener.startListening();
@@ -130,3 +168,5 @@ exports.services = {
 	twitter: twitterClient,
 	twitterHelper: twitterHelper
 };
+exports.blacklistCommands = blacklistCommands;
+exports.saveCommandsBlacklist = saveCommandsBlacklist;
