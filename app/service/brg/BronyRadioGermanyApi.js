@@ -18,7 +18,7 @@ module.exports = class BronyRadioGermanyApi {
 
 	static getCommunityUserCoins(discordUserId) {
 		return new Promise(function(resolve, reject) {
-			axios.get('https://panel.bronyradiogermany.com/api/communtiy/user/coin/' + encodeURIComponent(discordUserId))
+			axios.get('https://panel.bronyradiogermany.com/api/community/user/coin' + encodeURIComponent(discordUserId))
 				.then((response) => {
 					resolve(response);
 				})
@@ -31,7 +31,7 @@ module.exports = class BronyRadioGermanyApi {
 
 	static addCommunityUserCoins(discordUsername, discordUserId, coins) {
 		return new Promise(function(resolve, reject) {
-			axios.post('https://panel.bronyradiogermany.com/api/communtiy/user/coin/add' + '?authorizationToken=' + app.config.brg.authToken, {
+			axios.post('https://panel.bronyradiogermany.com/api/community/user/coin/add' + '?authorizationToken=' + app.config.brg.authToken, {
 				discordUsername: discordUsername,
 				discordUserId: discordUserId,
 				coins: coins
@@ -48,7 +48,7 @@ module.exports = class BronyRadioGermanyApi {
 
 	static removeCommunityUserCoins(discordUsername, discordUserId, coins) {
 		return new Promise(function(resolve, reject) {
-			axios.post('https://panel.bronyradiogermany.com/api/communtiy/user/coin/remove' + '?authorizationToken=' + app.config.brg.authToken, {
+			axios.post('https://panel.bronyradiogermany.com/api/community/user/coin/remove' + '?authorizationToken=' + app.config.brg.authToken, {
 				discordUsername: discordUsername,
 				discordUserId: discordUserId,
 				coins: coins
