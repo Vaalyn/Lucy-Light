@@ -23,7 +23,7 @@ module.exports = class CoinsCommand extends discord.Command {
 				let richEmbed = { embed: {
 					color: 6360082,
 					title: '**Dein aktueller Kontostand**\n\n',
-					description: ':moneybag: ' + response.result.coins + ' Bits'
+					description: ':moneybag: ' + response.data.result.coins + ' Bits'
 				}};
 
 				return msg.channel.send('', richEmbed);

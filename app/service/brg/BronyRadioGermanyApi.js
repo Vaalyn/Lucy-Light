@@ -18,7 +18,7 @@ module.exports = class BronyRadioGermanyApi {
 
 	static getCommunityUserCoins(discordUserId) {
 		return new Promise(function(resolve, reject) {
-			axios.get('https://panel.bronyradiogermany.com/api/community/user/coin' + encodeURIComponent(discordUserId))
+			axios.get('https://panel.bronyradiogermany.com/api/community/user/coin/' + encodeURIComponent(discordUserId))
 				.then((response) => {
 					resolve(response);
 				})
