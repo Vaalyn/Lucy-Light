@@ -5,29 +5,36 @@ let fs     = require('fs');
 module.exports = class StreamRecording {
 	constructor(logger) {
 		this.logger = logger;
-		this.isRecording = false;
-		this.fileName    = '';
+
+		this.recorder = {
+			stream: this._initializeRecorder('stream', 8000),
+			daydj: this._initializeRecorder('daydj', 8006)
+		};
 	}
 
-	start() {
+	start(mountpoint = 'stream') {
 		let self = this;
 
 		return new Promise(function(resolve, reject) {
-			if (self.isRecording) {
+			if (!self._isValidMountpoint(mountpoint)) {
+				return reject('Ungülter Stream');
+			}
+
+			if (self.recorder[mountpoint].isRecording) {
 				return reject('Aufnahme läuft bereits');
 			}
 
-			self.isRecording = true;
-			self.fileName    = __dirname + '/../../../recording/' + moment().format('YYYY-MM-DD-HH-mm-ss') + '.mp3';
+			self.recorder[mountpoint].isRecording = true;
+			self.recorder[mountpoint].fileName    = __dirname + '/../../../recording/' + moment().format('YYYY-MM-DD-HH-mm-ss') + '.mp3';
 
-			self.ripper = http.get('http://radio.bronyradiogermany.com:8000/stream', (response) => {
+			self.recorder[mountpoint].ripper = http.get(self.recorder[mountpoint].streamUrl, (response) => {
 				if (response.statusCode != 200) {
 					self.logger.error('Stream Error Code: ' + response.statusCode)
 					return reject('Stream Error Code: ' + response.statusCode)
 				}
 
 				response.on('data', (chunk) => {
-					fs.appendFile(self.fileName, chunk, (error) => {
+					fs.appendFile(self.recorder[mountpoint].fileName, chunk, (error) => {
 						if (error) {
 							self.logger.error(error);
 							return reject(error)
@@ -36,23 +43,39 @@ module.exports = class StreamRecording {
 				})
 			})
 
-			return resolve()
+			return resolve(mountpoint)
 		});
 	}
 
-	stop () {
+	stop (mountpoint = 'stream') {
 		let self = this;
 
 		return new Promise((resolve, reject) => {
-			if (!self.isRecording) {
-				reject('Es läuft keine Aufnahme');
+			if (!self._isValidMountpoint(mountpoint)) {
+				return reject('Ungülter Stream');
 			}
 
-			self.ripper.abort();
-			self.isRecording = false;
-			self.fileName    = '';
+			if (!self.recorder[mountpoint].isRecording) {
+				return reject('Es läuft keine Aufnahme');
+			}
+
+			self.recorder[mountpoint].ripper.abort();
+			self.recorder[mountpoint].isRecording = false;
+			self.recorder[mountpoint].fileName    = '';
 
 			return resolve()
 		})
+	}
+
+	_initializeRecorder(mountpoint, port) {
+		return {
+			isRecording: false,
+			fileName: '',
+			streamUrl: `http://radio.bronyradiogermany.com:${port}/${mountpoint}`
+		};
+	}
+
+	_isValidMountpoint(mountpoint) {
+		return this.recorder[mountpoint] !== undefined;
 	}
 }

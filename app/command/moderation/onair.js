@@ -17,7 +17,15 @@ module.exports = class OnAirCommand extends discord.Command {
 			throttling: {
 				usages: 3,
 				duration: 60
-			}
+			},
+			args: [
+				{
+					key: 'mountpoint',
+					prompt: 'Auf welchem Stream gehst du live?',
+					type: 'string',
+					default: 'stream'
+				}
+			]
 		});
 	}
 
@@ -42,15 +50,18 @@ module.exports = class OnAirCommand extends discord.Command {
 	}
 
 	async run(msg, args) {
-		recording.start()
+		recording.start(args.mountpoint)
 			.then(function(response) {
-				twitterHelper.tweetNextShow()
-					.then((response) => {
-						logger.log(response);
-					})
-					.catch((error) => {
-						logger.error(error)
-					});
+				if (response === 'stream') {
+					twitterHelper.tweetNextShow()
+						.then((response) => {
+							logger.log(response);
+						})
+						.catch((error) => {
+							logger.error(error)
+						});
+				}
+
 				logger.info('Sendung gestartet von: ' + msg.author.username);
 				return msg.reply('Die Sendung läuft jetzt, gib alles!');
 			})
