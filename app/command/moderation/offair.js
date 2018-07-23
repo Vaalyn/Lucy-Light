@@ -15,7 +15,15 @@ module.exports = class OffAirCommand extends discord.Command {
 			throttling: {
 				usages: 3,
 				duration: 60
-			}
+			},
+			args: [
+				{
+					key: 'mountpoint',
+					prompt: 'Auf welchem Stream möchtest du die Sendung beenden?',
+					type: 'string',
+					default: 'stream'
+				}
+			]
 		});
 	}
 
@@ -40,7 +48,7 @@ module.exports = class OffAirCommand extends discord.Command {
 	}
 
 	async run(msg, args) {
-		recording.stop()
+		recording.stop(args.mountpoint)
 			.then(function(response) {
 				logger.info('Sendung beendet von: ' + msg.author.username);
 				return msg.reply('Alles klar, die Sendung ist vorbei');
