@@ -12,12 +12,17 @@
 		"commandPrefix": "!! ",
 		"commandGroups": [
 			["admin", "Admin Befehle"],
+			["supermod", "Senior DJ/Moderator Befehle"],
 			["moderation", "Moderatoren Befehle"],
 			["everyone", "Öffentliche Befehle"]
 		],
 		"commandGroupRoles": [
 			{
 				"group": "admin",
+				"roles": []
+			},
+			{
+				"group": "supermod",
 				"roles": []
 			},
 			{
