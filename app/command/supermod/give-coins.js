@@ -32,6 +32,26 @@ module.exports = class GiveCoinsCommand extends discord.Command {
 		});
 	}
 
+	hasPermission(msg) {
+		let response = false;
+
+		if (msg.channel.type !== 'text') {
+			return response;
+		}
+
+		let commandGroupRoles = app.config.discord.commandGroupRoles.find((role) => {
+			return role.group === this.groupID;
+		});
+
+		commandGroupRoles.roles.forEach((role) => {
+			if (msg.member._roles.includes(role)) {
+				response = true;
+			}
+		});
+
+		return response;
+	}
+
 	async run(msg, args) {
 		let bits = args.bits;
 		let recipient = args.recipient;
