@@ -210,7 +210,7 @@ module.exports = class Survival {
 
 		return new Promise(function(resolve, reject) {
 			self.rounds.forEach((round) => {
-				if (codeword === round.codeword) {
+				if (codeword.toLowerCase() === round.codeword.toLowerCase()) {
 					if (round.stoppedAt !== null) {
 						return reject(`Die Runde für das Codewort \`${codeword}\` ist bereits vorbei!`);
 					}
