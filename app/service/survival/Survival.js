@@ -128,6 +128,7 @@ module.exports = class Survival {
 						if (timeSincePaused <= (60 * 30)) {
 							attendanceCheck.survived = true;
 							attendanceCheck.paused = true;
+							survivor.lastSurvivedAttendanceCheck = round.lastAttendanceCheck;
 						}
 
 						survivor.attendanceChecks.push(attendanceCheck);
@@ -217,7 +218,7 @@ module.exports = class Survival {
 					round.survivors.forEach((survivor) => {
 						if (discordUserId === survivor.discordUserId) {
 							if (cheat === true) {
-								survivor.pausedAt = moment.unix(Number.MAX_SAFE_INTEGER).unix();
+								survivor.pausedAt = Number.MAX_SAFE_INTEGER;
 
 								return resolve(`Du bist jetzt für die Runde \`${round.name}\` dauerhaft pausiert und musst in dieser Zeit bei keinem Anwesenheitstest mit machen.`);
 							}
@@ -309,15 +310,17 @@ module.exports = class Survival {
 	listSurvivors(codeword) {
 		let self = this;
 
-		self.logger.info(self.rounds);
-
 		return new Promise(function(resolve, reject) {
 			self.rounds.forEach((round) => {
 				if (codeword === round.codeword) {
-					let survivors = round.survivors.map((survivor) => {
+					let survivors = round.survivors.filter((survivor) => {
 						if (survivor.lastSurvivedAttendanceCheck >= round.lastAttendanceCheck) {
-							return `${survivor.discordUsername}`;
+							return true;
 						}
+
+						return false;
+					}).map((survivor) => {
+						return `${survivor.discordUsername}`;
 					});
 
 					return resolve(survivors);
