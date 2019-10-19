@@ -19,8 +19,7 @@ module.exports = class GiveCoinsCommand extends discord.Command {
 					key: 'bits',
 					label: 'Bits',
 					prompt: 'Wie viele Bits möchtest du erzeugen?\n',
-					type: 'integer',
-					min: 1
+					type: 'integer'
 				},
 				{
 					key: 'recipient',

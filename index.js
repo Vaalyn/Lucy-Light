@@ -8,6 +8,7 @@ let brg            = require('./app/service/brg/BronyRadioGermanyApi.js');
 let twitch         = require('./app/service/twitch/TwitchApi.js');
 let youtube        = require('./app/service/youtube/YouTubeApi.js');
 let googleCalendar = require('./app/service/google/GoogleCalendarApi.js');
+let Survival       = require('./app/service/survival/Survival.js');
 
 let winston = require('winston');
 require('winston-daily-rotate-file');
@@ -39,6 +40,8 @@ let twitterClient = new twitter({
 	access_token_key: config.twitter.accessTokenKey,
 	access_token_secret: config.twitter.accessTokenSecret
 });
+
+let survival = new Survival(config, logger);
 
 let client  = new discord.Client({
 	owner: config.discord.ownerId,
@@ -166,7 +169,8 @@ exports.services = {
 	google: google,
 	recording: recording,
 	twitter: twitterClient,
-	twitterHelper: twitterHelper
+	twitterHelper: twitterHelper,
+	survival: survival
 };
 exports.blacklistCommands = blacklistCommands;
 exports.saveCommandsBlacklist = saveCommandsBlacklist;
