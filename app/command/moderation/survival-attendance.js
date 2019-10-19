@@ -11,7 +11,7 @@ module.exports = class SurvivalAttendanceCommand extends discord.Command {
 			aliases: ['survival-attendance'],
 			group: 'moderation',
 			memberName: 'survival-attendance',
-			description: 'Benutze mächtige Cheats um dich in einer Survival Runde unbesiegbar zu machen.',
+			description: 'Starte einen Anwesenheitstest',
 			throttling: {
 				usages: 3,
 				duration: 60
