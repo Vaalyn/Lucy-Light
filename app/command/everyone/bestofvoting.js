@@ -17,7 +17,7 @@ module.exports = class BestOfVotingCommand extends discord.Command {
 	}
 
 	async run(msg, args) {
-		var message = '**Abstimmen für das Best of-Voting**: https://brg.drweissbrot.net/bestof';
+		var message = '**Abstimmen für das Best of-Voting**: https://panel.bronyradiogermany.com/best-of-voting';
 		return msg.reply(message);
 	}
 };
