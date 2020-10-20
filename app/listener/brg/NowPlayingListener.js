@@ -2,11 +2,10 @@ let app    = require('../../../index.js');
 let moment = require('moment');
 
 module.exports = class BronyRadioGermanyNowPlayingListener {
-	constructor(config, logger, brg, twitch) {
+	constructor(config, logger, brg) {
 		this.config = config;
 		this.logger = logger;
 		this.brg    = brg;
-		this.twitch = twitch;
 
 		this.listenerInterval = null;
 		this.lastPlayedSong = {
@@ -30,16 +29,7 @@ module.exports = class BronyRadioGermanyNowPlayingListener {
 
 					self.logger.info('Set game to "' + title + ' - ' + artist + '"');
 
-					let streamIsOnline = await self.twitch.isStreamOnline()
-
-					if (streamIsOnline) {
-						self.logger.info('Twitch stream is online');
-						app.client.user.setActivity(title + ' - ' + artist, {
-							url: 'https://twitch.tv/bronyradiogermany'
-						});
-					} else {
-						app.client.user.setActivity(title + ' - ' + artist);
-					}
+					app.client.user.setActivity(title + ' - ' + artist);
 
 					self.setLastPlayedSong(id, title, artist);
 				})

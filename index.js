@@ -5,7 +5,6 @@ let moment         = require('moment');
 let discord        = require('discord.js-commando');
 let twitter        = require('twitter');
 let brg            = require('./app/service/brg/BronyRadioGermanyApi.js');
-let twitch         = require('./app/service/twitch/TwitchApi.js');
 let youtube        = require('./app/service/youtube/YouTubeApi.js');
 let googleCalendar = require('./app/service/google/GoogleCalendarApi.js');
 let Survival       = require('./app/service/survival/Survival.js');
@@ -62,7 +61,7 @@ let listener = {
 };
 let coinsMessageListener    = new listener.coins();
 let twitterTimelineListener = new listener.twitterTimeline(config, logger);
-let brgNowPlayingListener   = new listener.brgNowPlaying(config, logger, brg, twitch);
+let brgNowPlayingListener   = new listener.brgNowPlaying(config, logger, brg);
 let brgNextShowListener     = new listener.brgNextShow(config, logger, google);
 
 let blacklistCommands = JSON.parse(fs.readFileSync(path.join(__dirname, '/blacklist/commands.json')));

@@ -51,9 +51,6 @@
 		},
 		"screenName": ""
 	},
-	"twitch": {
-		"clientId": ""
-	},
 	"brg": {
 		"authToken": ""
 	},
